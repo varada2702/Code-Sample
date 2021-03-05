@@ -1,0 +1,79 @@
+,Geo_ID,Geo_Group
+1,0.0,Chicago
+2,1.0,Rogers Park
+3,2.0,West Ridge
+4,3.0,Uptown
+5,4.0,Lincoln Square
+6,5.0,North Center
+7,6.0,Lake View
+8,7.0,Lincoln Park
+9,8.0,Near North Side
+10,9.0,Edison Park
+11,10.0,Norwood Park
+12,11.0,Jefferson Park
+13,12.0,Forest Glen
+14,13.0,North Park
+15,14.0,Albany Park
+16,15.0,Portage Park
+17,16.0,Irving Park
+18,17.0,Dunning
+19,18.0,Montclare
+20,19.0,Belmont Cragin
+21,20.0,Hermosa
+22,21.0,Avondale
+23,22.0,Logan Square
+24,23.0,Humboldt Park
+25,24.0,West Town
+26,25.0,Austin
+27,26.0,West Garfield Park
+28,27.0,East Garfield Park
+29,28.0,Near West Side
+30,29.0,North Lawndale
+31,30.0,South Lawndale
+32,31.0,Lower West Side
+33,32.0,Loop
+34,33.0,Near South Side
+35,34.0,Armour Square
+36,35.0,Douglas
+37,36.0,Oakland
+38,37.0,Fuller Park
+39,38.0,Grand Boulevard
+1,39.0,Kenwood
+2,40.0,Washington Park
+3,41.0,Hyde Park
+4,42.0,Woodlawn
+5,43.0,South Shore
+6,44.0,Chatham
+7,45.0,Avalon Park
+8,46.0,South Chicago
+9,47.0,Burnside
+10,48.0,Calumet Heights
+11,49.0,Roseland
+12,50.0,Pullman
+13,51.0,South Deering
+14,52.0,East Side
+15,53.0,West Pullman
+16,54.0,Riverdale
+17,55.0,Hegewisch
+18,56.0,Garfield Ridge
+19,57.0,Archer Heights
+20,58.0,Brighton Park
+21,59.0,McKinley Park
+22,60.0,Bridgeport
+23,61.0,New City
+24,62.0,West Elsdon
+25,63.0,Gage Park
+26,64.0,Clearing
+27,65.0,West Lawn
+28,66.0,Chicago Lawn
+29,67.0,West Englewood
+30,68.0,Englewood
+31,69.0,Grt.Grand Crossing
+32,70.0,Ashburn
+33,71.0,Auburn Gresham
+34,72.0,Beverly
+35,73.0,Washington Heights
+36,74.0,Mount Greenwood
+37,75.0,Morgan Park
+38,76.0,O'Hare
+39,77.0,Edgewater
