@@ -97,7 +97,7 @@ xlrd.xlsx.Element_has_iter = True
 
 
 ## Insert your github directory
-os.chdir(r"D:\GitHub\Code-Sample")
+os.chdir(r"D:\GitHub\Code-Sample\Python Project")
 path1 = os.getcwd()
 
 
