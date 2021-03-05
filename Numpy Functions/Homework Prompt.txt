@@ -1,0 +1,27 @@
+Consider the face emotion classiﬁcation problem. Design and compare the per-
+formances of the classiﬁers proposed in a and b, below. In each case, divide the dataset into
+8 equal sized subsets (e.g., examples 1 − 16, 17 − 32, etc). Use 6 sets of the data to estimate
+w for each choice of the regularization parameter, select the best value for the regularization
+parameter by estimating the error on one of the two remaining sets of data, and ﬁnally use
+the w corresponding to the best value of the regularization parameter to predict the labels
+of the remaining “hold-out” set. Compute the number of mistakes made on this hold-out set
+and divide that number by 16 (the size of the set) to estimate the error rate. Repeat this
+process 56 times (for the 8 × 7 diﬀerent choices of the sets used to select the regularization
+parameter and estimate the error rate) and average the error rates to obtain a ﬁnal estimate.
+
+
+a) Truncated SVD solution: Use the pseudo-inverse V Σk+UT , where Σk+ is computed
+by inverting the k largest singular values and setting others to zero. Here, k is the
+regularization parameter and it takes values k = 1, 2, . . . , 9; i.e., compute 9 diﬀerent
+solutions, wbk.
+
+b) Regularized LS: Let wbλ = arg minwky − Xwk22 + λkwk22, for the following values of
+the regularization parameter λ = 0, 2−1, 20, 21, 22, 23, and 24. Show that wbλ can be
+computed using the SVD and use this fact in your code.
+
+c) Use the original dataset to generate 3 new features for each face, as follows. Take the
+3 new features to be random linear combination of the original 9 features. This can
+be done for instance with the Matlab command X*randn(9,3) and augmenting the
+original matrix X with the resulting 3 columns. Will these new features be helpful for
+classiﬁcation? Why or why not? Repeat the experiments in (a) and (b) above using the
+12 features.
