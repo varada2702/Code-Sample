@@ -1,2 +1,2 @@
 # Code Sample
- Code Sample for Different Languages
+ Code Samples for R and Python
