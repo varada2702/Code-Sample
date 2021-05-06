@@ -197,7 +197,9 @@ def unzip(file_name):
         print('Done!')
     return
 
-
+##########################################################################################
+# Below Code not written by me (Until line specified). This was a group project
+##########################################################################################
 #This function calculates change in population between two years
 def population_change(df,col1,col2,new_col1):
     df[new_col1] = (df[col2]-df[col1])
@@ -373,6 +375,10 @@ def plot_points(df_boundary,grocery,farmer,title, flag = 0, df_socio = pd.DataFr
     plt.savefig(title+'.png')
     plt.show()
 
+##########################################################################################
+# Until here is not written by me. 
+# below code is written by me
+##########################################################################################
 
 def filterdf_2016(df):
     df_2016 = df[df['Year'].isin(['2012-2016'])]
@@ -676,7 +682,7 @@ download_file(url10,filename10,path1)
 
 
 ######################################################################
-#SPATIAL ANALYSIS USING GEOPANDAS
+#SPATIAL ANALYSIS USING GEOPANDAS --- THIS SECTION IS NOT WRITTEN BY ME
 ######################################################################
 # specifying the zip file name #JL: this whole section should be in functions also
 file_name = "Boundaries - Community Areas (current).zip"
@@ -729,7 +735,7 @@ table8_long = df_to_spatial(table8,df_boundary,"Active_transp_percent","Active_t
 plot_points(df_boundary,grocery = grocery_gdf,farmer = far_mkt_gdf,flag = 1, df_socio = table8_long,col_name = "Active_transp_2012_16",title = "Distribution of grocery staores and markets against transportation activity")
 
 
-# Map- Food Access Against Unemp #JL: don't copy-paste again
+# Map- Food Access Against Unemp 
 table10_map =  df_to_spatial(table10,df_boundary,"unemployed_percent","unemployed")
 plot_points(df_boundary,grocery = grocery_gdf,farmer = far_mkt_gdf,flag = 1, df_socio = table10_map,col_name = "unemployed_2012_16",title = "food access against unemployment")
 
@@ -748,7 +754,7 @@ appendix.to_csv("Community areas in Chicago.csv")
 
 
 ######################################################################
-#QUANTITATIVE ANALYSIS I - OLS MODEL
+#QUANTITATIVE ANALYSIS I - OLS MODEL - THIS IS WRITTEN BY ME
 ######################################################################
 
 df_2016 = ols_df_merge(filterdf_2016, table3, table4, table5, table6, table7, table8, table9, table10)
@@ -774,7 +780,7 @@ ols_model(y1, X1)
 
 
 ######################################################################
-# QUANTITATIVE ANALYSIS II - Machine Learning Model
+# QUANTITATIVE ANALYSIS II - Machine Learning Model - THIS IS WRITTEN BY ME
 ######################################################################
 
 # Use data for 2011-15 to predict the infant mortality in 2012-2016. This is
