@@ -1,0 +1,211 @@
+rm(list=ls())
+
+## Loading packages
+library(tidyverse)
+library(readxl)
+library(dplyr)
+library(reshape)
+library(data.table)
+library(reshape2)
+library(plyr)
+library(tidyquant)
+library(janitor)
+library(xts)
+library(openxlsx)
+
+#Setting the working directory
+path <- "INSERT PATH TO DIRECTORY HERE"
+setwd("path")
+
+# Load Data
+data <- read_excel("Input.xlsx")
+mydata <- data
+
+rolling_reg_function <- function(y_var, x_var, df){
+
+  regression_results <- data.frame(
+    start_position = numeric(),
+    end_position = numeric(),
+    coefficient = numeric(),
+    coefficient_se = numeric(),
+    intercept = numeric(),
+    intercept_se = numeric(),
+    subset_length = numeric(),
+    rse = numeric(),
+    r_sqr = numeric(),
+    adj_r_sqr = numeric()
+  )
+  
+  for (i in 1:nrow(df)) {
+    
+    subset_data <- filter(df, df[["row"]] >= df[["start_position"]][i] & row <= df[["end_position"]][i])
+    # Note-Start and end dates for 2019 are placeholders and not used in analysis
+    
+    subset_data_filter <- subset_data
+    
+    model <- lm(subset_data_filter[[y_var]] ~ subset_data_filter[[x_var]])
+
+    regression_results <- rbind(regression_results, data.frame(
+      start_position = subset_data[1, "start_position"],
+      end_postion = subset_data[nrow(subset_data), "end_position"],
+      coefficient = coef(model)[2],
+      coefficient_se = sqrt(diag(vcov(model)))[2],
+      intercept = coef(model)[1],
+      intercept_se = sqrt(diag(vcov(model)))[1],
+      subset_length = nrow(subset_data_filter),
+      rse = sigma(model),
+      r_sqr = summary(model)$r.squared,
+      adj_r_sqr = summary(model)$adj.r.squared
+    ))
+  }
+  
+  row <- as.data.frame(list(1:nrow(df)))
+  colnames(row)[1] <- "row"
+  regression_results <- cbind(regression_results, row)
+  
+  output <- merge(df, regression_results, by="row")
+
+  output[[y_var]] = as.numeric(output[[y_var]])
+  output[[x_var]] = as.numeric(output[[x_var]])
+  output[["intercept"]] = as.numeric(output[["intercept"]])
+  output[["coefficient"]] = as.numeric(output[["coefficient"]])
+  
+  output[["yhat"]] = output[["intercept"]] + output[["coefficient"]] * output[[x_var]]
+  output[["excess_returns"]] = output[[y_var]] - output[["yhat"]]
+  
+  return(output)
+  
+}
+
+
+#Getting Index Residuals 
+
+COP_residuals <- rolling_reg_function(y_var = "COP_Index", x_var = "SP500", df = data)
+names(COP_residuals)[names(COP_residuals) == "excess_returns"] <- "COP_ind_residual"
+
+CTRA_residuals <- rolling_reg_function(y_var = "CTRA_Index", x_var = "SP500", df = data)
+names(CTRA_residuals)[names(CTRA_residuals) == "excess_returns"] <- "CTRA_ind_residual"
+
+CXO_residuals <- rolling_reg_function(y_var = "CXO_Index", x_var = "SP500", df = data)
+names(CXO_residuals)[names(CXO_residuals) == "excess_returns"] <- "CXO_ind_residual"
+
+DVN_residuals <- rolling_reg_function(y_var = "DVN_Index", x_var = "SP500", df = data)
+names(DVN_residuals)[names(DVN_residuals) == "excess_returns"] <- "DVN_ind_residual"
+
+EOG_residuals <- rolling_reg_function(y_var = "EOG_Index", x_var = "SP500", df = data)
+names(EOG_residuals)[names(EOG_residuals) == "excess_returns"] <- "EOG_ind_residual"
+
+FANG_residuals <- rolling_reg_function(y_var = "FANG_Index", x_var = "SP500", df = data)
+names(FANG_residuals)[names(FANG_residuals) == "excess_returns"] <- "FANG_ind_residual"
+
+HES_residuals <- rolling_reg_function(y_var = "HES_Index", x_var = "SP500", df = data)
+names(HES_residuals)[names(HES_residuals) == "excess_returns"] <- "HES_ind_residual"
+
+MRO_residuals <- rolling_reg_function(y_var = "MRO_Index", x_var = "SP500", df = data)
+names(MRO_residuals)[names(MRO_residuals) == "excess_returns"] <- "MRO_ind_residual"
+
+NBL_residuals <- rolling_reg_function(y_var = "NBL_Index", x_var = "SP500", df = data)
+names(NBL_residuals)[names(NBL_residuals) == "excess_returns"] <- "NBL_ind_residual"
+
+PXD_residuals <- rolling_reg_function(y_var = "PXD_Index", x_var = "SP500", df = data)
+names(PXD_residuals)[names(PXD_residuals) == "excess_returns"] <- "PXD_ind_residual"
+
+# Run regression for Apache by excluding elim dates
+rolling_reg_function_excl_dates <- function(y_var, x_var, df){
+  
+  regression_results <- data.frame(
+    start_position = numeric(),
+    end_position = numeric(),
+    coefficient = numeric(),
+    coefficient_se = numeric(),
+    intercept = numeric(),
+    intercept_se = numeric(),
+    subset_length = numeric(),
+    rse = numeric(),
+    r_sqr = numeric(),
+    adj_r_sqr = numeric()
+  )
+  
+  for (i in 1:nrow(df)) {
+    subset_data <- filter(df, df[["row"]] >= df[["start_position"]][i] & row <= df[["end_position"]][i])
+    
+    subset_data_filter <- filter(subset_data, subset_data[["nye_dates"]] == 0)
+    
+    model <- lm(subset_data_filter[[y_var]] ~ subset_data_filter[[x_var]])
+    
+    regression_results <- rbind(regression_results, data.frame(
+      start_position = subset_data[1, "start_position"],
+      end_postion = subset_data[nrow(subset_data), "end_position"],
+      coefficient = coef(model)[2],
+      coefficient_se = sqrt(diag(vcov(model)))[2],
+      intercept = coef(model)[1],
+      intercept_se = sqrt(diag(vcov(model)))[1],
+      subset_length = nrow(subset_data_filter),
+      rse = sigma(model),
+      r_sqr = summary(model)$r.squared,
+      adj_r_sqr = summary(model)$adj.r.squared
+    ))
+  }
+  
+  row <- as.data.frame(list(1:nrow(df)))
+  colnames(row)[1] <- "row"
+  regression_results <- cbind(regression_results, row)
+  
+  output <- merge(df, regression_results, by="row")
+  
+  output[[y_var]] = as.numeric(output[[y_var]])
+  output[[x_var]] = as.numeric(output[[x_var]])
+  output[["intercept"]] = as.numeric(output[["intercept"]])
+  output[["coefficient"]] = as.numeric(output[["coefficient"]])
+  
+  output[["yhat"]] = output[["intercept"]] + output[["coefficient"]] * output[[x_var]]
+  output[["excess_returns"]] = output[[y_var]] - output[["yhat"]]
+  
+  return(output)
+  
+}
+
+APA_residuals <- rolling_reg_function_excl_dates(y_var = "APA_Index", x_var = "SP500", df = data)
+names(APA_residuals)[names(APA_residuals) == "excess_returns"] <- "APA_ind_residual"
+
+# Combine all excess returns and dates to form a single dataframe
+
+industry_index_residuals <- list(APA_residuals,
+                                 COP_residuals,
+                                 CTRA_residuals,
+                                 CXO_residuals,
+                                 DVN_residuals,
+                                 EOG_residuals,
+                                 FANG_residuals,
+                                 HES_residuals,
+                                 MRO_residuals,
+                                 NBL_residuals,
+                                 PXD_residuals)
+
+merge_col <- "row"
+
+merged_df <- Reduce(function(APA_residuals, COP_residuals) merge(APA_residuals, COP_residuals, by = merge_col), industry_index_residuals)
+
+keep_cols <- c("Date", 
+               "start_cp", 
+               "end_cp",  
+               "row",
+               "APA_ind_residual",
+               "COP_ind_residual",
+               "CTRA_ind_residual",
+               "CXO_ind_residual",
+               "DVN_ind_residual",
+               "EOG_ind_residual",
+               "FANG_ind_residual",
+               "HES_ind_residual",
+               "MRO_ind_residual",
+               "NBL_ind_residual",
+               "PXD_ind_residual")
+
+merged_df <- merged_df %>%
+  select(all_of(keep_cols))
+
+merged_df <- merged_df %>% filter(row > 299)
+
+write.xlsx(mydata,'Output.xlsx',colNames = TRUE)
+
